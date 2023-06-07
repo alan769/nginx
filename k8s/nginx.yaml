@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nginx-service
+  namespace: ci-cd
 spec:
   type: NodePort
   selector:
@@ -17,11 +18,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
+  namespace: ci-cd
   labels:
     app: nginx-app
     type: front-end
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: nginx-app
@@ -34,4 +36,4 @@ spec:
     spec:
       containers:
         - name: nginx-container
-          image: nginx:latest
+          image: nginx:{{tag}}
