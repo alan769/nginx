@@ -36,4 +36,4 @@ spec:
     spec:
       containers:
         - name: nginx-container
-          image: nginx:{{tag}}
+          image: alan769/nginx:{{tag}}
