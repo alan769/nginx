@@ -37,3 +37,25 @@ spec:
       containers:
         - name: nginx-container
           image: alan769/nginx:{{tag}}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+  name: nginx-deployment
+  namespace: ci-cd
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: cicdnginx.dev.adviseu-it.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: nginx-service
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
