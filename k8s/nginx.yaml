@@ -12,13 +12,14 @@ spec:
   - port: 80
   selector:
     app: nginx
-    
+
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-nginx
+  namespace: ci-cd
   labels:
     app: nginx
 spec:
