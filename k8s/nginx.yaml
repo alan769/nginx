@@ -13,6 +13,7 @@ spec:
   selector:
     app: nginx
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
