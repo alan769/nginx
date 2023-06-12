@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:latest
+        image: nginx:{{tag}}
         ports:
         - containerPort: 80
 
