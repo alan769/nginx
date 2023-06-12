@@ -12,6 +12,7 @@ spec:
   - port: 80
   selector:
     app: nginx
+    
 ---
 
 apiVersion: apps/v1
