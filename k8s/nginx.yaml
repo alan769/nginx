@@ -1,3 +1,54 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx-svc
+  namespace: ci-cd
+  labels:
+    app: nginx
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: nginx
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx
+  namespace: ci-cd
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: alan769/nginx:{{tag}}
+        ports:
+        - containerPort: 80
+        volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-configmap
+              
+
+---
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -50,58 +101,6 @@ data:
         proxy_http_version 1.1;
       }
     }
-
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
-  namespace: ci-cd
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: alan769/nginx:{{tag}}
-        ports:
-        - containerPort: 80
-        volumeMounts:
-        - mountPath: /etc/nginx # mount nginx-conf volumn to /etc/nginx
-          readOnly: true
-          name: nginx-conf
-        - mountPath: /var/log/nginx
-          name: log
-      volumes:
-      - name: nginx-conf
-        configMap:
-          name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
-          items:
-            - key: nginx.conf
-              path: nginx.conf
-            - key: virtualhost.conf
-              path: virtualhost/virtualhost.conf # dig directory
-      - name: log
-        emptyDir: {}
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx-svc
-  namespace: ci-cd
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 80
-  selector:
-    app: nginx
 
 ---
 
