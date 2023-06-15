@@ -34,8 +34,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: alan769/nginx:{{tag}}
-        imagePullPolicy: Never
+        image: nginx:latest
         ports:
         - containerPort: 80
         volumeMounts:
